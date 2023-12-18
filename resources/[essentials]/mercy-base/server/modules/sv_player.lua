@@ -795,6 +795,15 @@ PlayerModule = {
                         json.encode(PlayerData.Licenses),
                     }, function(result) end, true)		
                     FunctionsModule.ShowSuccess(GetCurrentResourceName(), "^6[Player] ^0"..PlayerData.Name.."\'s (" .. PlayerData.CitizenId .. ") data saved in database.")
+
+                    --Add Player to MDW
+                    DatabaseModule.Insert('INSERT INTO mdw_profiles (citizenId, name, image, notes) VALUES (?, ?, ?, ?)', {
+                      PlayerData.CitizenId,
+                      PlayerData.CharInfo.Firstname .. ' ' .. PlayerData.CharInfo.Lastname,
+                      "", -- image
+                      "", -- notes
+                    }, function(result) end, true)
+                    FunctionsModule.ShowSuccess(GetCurrentResourceName(), "^6[Player] ^0"..PlayerData.Name.."\'s (" .. PlayerData.CitizenId .. ") data saved in MDW.")
                 else
                     -- PlayerModule.DebugLog('Save', 'UPDATING EXISTING PLAYER')
                     DatabaseModule.Update('UPDATE players SET Name = ?, Identifiers = ?, Money = ?, CharInfo = ?, Job = ?, Position = ?, Inventory = ?, Globals = ?, Skin = ?, Licenses = ? WHERE CitizenId = ? AND Cid = ? ', {
